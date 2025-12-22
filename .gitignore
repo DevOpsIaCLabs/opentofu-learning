@@ -1,4 +1,5 @@
 # Local .terraform directories (plugins, modules)
+.idea
 **/.terraform/*
 .terraform/
 terraform.tfvars
