@@ -56,8 +56,11 @@ OpenTofu itself:
 Providers **add this knowledge**.
 
 Without a provider:
+
 ❌ No authentication  
+
 ❌ No API communication  
+
 ❌ No infrastructure creation
  
 ---
@@ -122,6 +125,8 @@ provider "azurerm" {
 - azurerm → Azure Resource Manager provider
 - features {} → Mandatory Azure configuration block
 - OpenTofu can now talk to Azure
+
+---
 ### Example: AWS Provider
 Hcl
 ```hcl
@@ -133,6 +138,9 @@ provider "aws" {
 - Provider knows AWS region
 - Uses AWS APIs
 - Can create AWS resources
+
+---
+
 ## How Providers Are Downloaded
 When you run:
 Bash
@@ -146,6 +154,8 @@ OpenTofu:
 3. Stores them in .terraform/ directory
 4. Prepares the working directory
 > ⚠️ The .terraform/ directory should never be committed to GitHub.
+
+---
 
 ## Provider Versioning (Best Practice)
 Always lock provider versions to avoid breaking changes.
@@ -167,6 +177,9 @@ Why version locking is important:
 - Prevents unexpected failures
 - Ensures consistent behavior
 - Safe for teams
+
+---
+
 ## Multiple Providers in One Project
 You can use more than one provider in a single project.
 ### Example
@@ -187,6 +200,8 @@ This allows:
 - Azure infrastructure creation
 - GitHub repository management
 - All from one OpenTofu project
+
+---
 
 ## Provider Aliases (Advanced but Important)
 Aliases allow multiple configurations of the same provider.
@@ -218,6 +233,8 @@ resource "azurerm_resource_group" "example" {
 }
 ```
 
+---
+
 ## Common Beginner Mistakes
 ❌ Forgetting provider block
 
@@ -228,6 +245,8 @@ resource "azurerm_resource_group" "example" {
 ❌ Missing authentication
 
 ❌ Not locking provider versions
+
+---
 
 ## Best Practices for Providers
 ✔ Define providers in providers.tf
@@ -240,13 +259,13 @@ resource "azurerm_resource_group" "example" {
 
 ✔ Keep provider config minimal
 
-
+---
 ## Summary (In Simple Words)
 - Provider = Connector between OpenTofu and real world
 - OpenTofu cannot work without providers
 - Providers translate .tf code into API calls
 - One project can use multiple providers
 - Providers must be initialized using tofu init
-
+---
 ## What’s Next?
 Now that you understand providers, the next step is to learn about Resources, which define what exactly gets created.
