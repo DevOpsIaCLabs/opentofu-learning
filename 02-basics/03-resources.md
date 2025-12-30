@@ -278,3 +278,8 @@ File order does not matter.
 
 Now that you understand resources, the next step is learning Variables, which make configurations reusable and flexible.
 
+#### 👉 Next file to create:
+
+```text
+02-basics/04-variables.md
+```

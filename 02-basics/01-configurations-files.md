@@ -219,3 +219,10 @@ This configuration:
 ### What’s Next?
 
 Next, you should learn about Providers, which tell OpenTofu where to create infrastructure.
+
+
+#### 👉 Next file to create:
+
+```text
+02-basics/02-providers.md
+```

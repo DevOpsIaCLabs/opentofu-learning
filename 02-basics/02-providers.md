@@ -269,3 +269,9 @@ resource "azurerm_resource_group" "example" {
 ---
 ## What’s Next?
 Now that you understand providers, the next step is to learn about Resources, which define what exactly gets created.
+
+#### 👉 Next file to create:
+
+```text
+02-basics/03-resources.md
+```

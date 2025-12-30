@@ -174,3 +174,7 @@ chmod +x /usr/local/bin/tofu
 - Visual Studio Code
 - Git
 - Docker Desktop (optional)
+
+### Next Steps 
+After installing OpenTofu on macOS, proceed to:
+
