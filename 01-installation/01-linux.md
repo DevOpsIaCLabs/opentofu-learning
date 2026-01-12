@@ -1,219 +1,248 @@
 # OpenTofu Installation on Linux
 
-## Introduction
+## 📌 Introduction
 
-This document explains how to install **OpenTofu** on major Linux distributions:
+This document explains how to install **OpenTofu** on Linux systems using **officially supported methods** as documented by the OpenTofu project.
 
-- Ubuntu (APT-based)
-- Debian (APT-based)
-- RHEL / CentOS / Rocky / AlmaLinux (DNF/YUM-based)
+Supported installation methods:
+- Debian / Ubuntu (DEB packages)
+- RHEL / Rocky / Alma / CentOS (RPM packages)
+- Snap (Universal method)
 
-OpenTofu provides official packages for Linux, making installation simple and reliable.
+👉 These steps follow **official OpenTofu documentation** and are safe for production use.
 
 ---
 
-## Prerequisites
+## 🛠 Prerequisites
 
 Before installing OpenTofu, ensure:
 
-- You have **root or sudo access**
-- Your system is updated
-- Internet connectivity is available
+- Linux system with sudo/root access
+- Internet connectivity
+- `curl` or `wget` installed
 
-Check OS version:
+Check OS details:
 ```bash
 cat /etc/os-release
 ```
 ---
-## Install OpenTofu on Ubuntu
-### Supported Versions
-- Ubuntu 20.04
-- Ubuntu 22.04
-- Ubuntu 24.04
-### Step 1: Update system packages
-Bash
-```bash
-sudo apt update && sudo apt upgrade -y
-```
 
-### Step 2: Install required dependencies
-Bash
-```bash
-sudo apt install -y wget gnupg lsb-release
-```
+## 🟢 Method 1: Install OpenTofu on Debian / Ubuntu (DEB)
+### Supported Distributions
 
+- Ubuntu 20.04 / 22.04 / 24.04
+- Debian 11 / 12
 
-### Step 3: Add OpenTofu GPG key
+---
 
-Bash
-```bash
+### Step 1: Install required packages
 
-wget -O- https://packages.opentofu.org/opentofu.gpg | \
-gpg --dearmor | sudo tee /usr/share/keyrings/opentofu.gpg > /dev/null
-```
-### Step 4: Add OpenTofu repository
-
-Bash
-```bash
-echo "deb [signed-by=/usr/share/keyrings/opentofu.gpg] \
-https://packages.opentofu.org/opentofu/$(lsb_release -cs) main" | \
-sudo tee /etc/apt/sources.list.d/opentofu.list
-```
-
-### Step 5: Install OpenTofu
-Bash
-```bash
+```hcl
 sudo apt update
-sudo apt install -y opentofu
+sudo apt install -y ca-certificates curl gnupg lsb-release
 ```
 
 ---
-## Install OpenTofu on Debian
-### Supported Versions
-- Debian 11 (Bullseye)
-- Debian 12 (Bookworm)
-### Step 1: Update system packages
 
-Bash
-```bash
-sudo apt update && sudo apt upgrade -y
+### Step 2: Add OpenTofu GPG key
+
+```hcl
+sudo install -m 0755 -d /etc/apt/keyrings
+
+curl -fsSL https://packages.opentofu.org/opentofu.gpg | \
+sudo gpg --dearmor -o /etc/apt/keyrings/opentofu.gpg
+
+sudo chmod a+r /etc/apt/keyrings/opentofu.gpg
 ```
-
-### Step 2: Install dependencies
-Bash
-```bash
-sudo apt install -y wget gnupg lsb-release
-```
-
-### Step 3: Add OpenTofu GPG key
-
-Bash
-```bash
-wget -O- https://packages.opentofu.org/opentofu.gpg | \
-gpg --dearmor | sudo tee /usr/share/keyrings/opentofu.gpg > /dev/null
-```
-### Step 4: Add OpenTofu repository
-
-Bash
-```bash
-echo "deb [signed-by=/usr/share/keyrings/opentofu.gpg] \
-https://packages.opentofu.org/opentofu/$(lsb_release -cs) main" | \
-sudo tee /etc/apt/sources.list.d/opentofu.list
-```
-
-### Step 5: Install OpenTofu
-Bash
-```bash
-sudo apt update
-sudo apt install -y opentofu
-```
-
 
 ---
-## Install OpenTofu on RHEL / CentOS / Rocky / AlmaLinux
-### Supported Versions
+
+### Step 3: Add OpenTofu APT repository
+
+```hcl
+echo \
+"deb [signed-by=/etc/apt/keyrings/opentofu.gpg] https://packages.opentofu.org/opentofu $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/opentofu.list > /dev/null
+
+```
+
+---
+
+### Step 4: Install OpenTofu
+
+```hcl
+sudo apt update
+sudo apt install -y opentofu
+
+```
+---
+
+## 🔵 Method 2: Install OpenTofu on RHEL / Rocky / Alma / CentOS (RPM)
+## Supported Distributions
+
 - RHEL 8 / 9
-- CentOS Stream 8 / 9
 - Rocky Linux 8 / 9
 - AlmaLinux 8 / 9
+- CentOS Stream 8 / 9
 
-### Step 1: Update system packages
+---
+### Step 1: Install required tools
 
-Bash
-```bash
-sudo dnf update -y
-```
-
-### Step 2: Add OpenTofu repository
-
-Bash
-```bash
-sudo dnf config-manager --add-repo \
-https://packages.opentofu.org/opentofu.repo
-```
-
-If dnf config-manager is missing:
-
-Bash
-```bash
+```hcl
 sudo dnf install -y dnf-plugins-core
+
+```
+---
+
+### Step 2: Add OpenTofu RPM repository
+
+```hcl
+sudo dnf config-manager --add-repo https://packages.opentofu.org/opentofu.repo
+
 ```
 
+---
 ### Step 3: Install OpenTofu
 
-Bash
-```bash
+```hcl
 sudo dnf install -y opentofu
 ```
 
-## Verify Installation
-### Check OpenTofu version:
+---
 
-Bash
-```bash
+## 🟡 Method 3: Install OpenTofu Using Snap (Universal)
+
+#### Snap is useful when:
+
+- Package manager access is restricted
+- You want quick installation
+- Distribution is not officially listed
+
+---
+### Step 1: Ensure snap is installed
+
+
+```hcl
+snap --version
+
+```
+If not installed:
+
+```hcl
+sudo apt install snapd     # Debian/Ubuntu
+sudo dnf install snapd     # RHEL-based
+
+```
+---
+### Step 2: Install OpenTofu via Snap
+
+```hcl
+sudo snap install opentofu --classic
+
+```
+
+---
+
+### ✅ Verify Installation
+
+After installation (any method), verify:
+
+```hcl
 tofu version
-```
-### Expected output:
 
-Text
-> OpenTofu v1.x.x
+```
+Expected output:
+
+```hcl
+OpenTofu v1.x.x
+
+```
 
 ---
-## Enable Command Auto-Completion (Optional)
-### Bash
 
-Bash
-```bash
-tofu -install-autocomplete
-```
+### 🔄 Upgrade OpenTofu
+#### Debian / Ubuntu
 
-### Restart shell:
-
-Bash
-```bash
-exec bash
-```
----
-## Upgrade OpenTofu
-### Ubuntu / Debian
-
-Bash
-```bash
+```hcl
 sudo apt update
 sudo apt upgrade opentofu
+
 ```
 
-### RHEL-based
+#### RHEL-based
 
-Bash
-```bash
+```hcl
 sudo dnf upgrade opentofu
-```
----
-## Uninstall OpenTofu
-### Ubuntu / Debian
 
-Bash
-```bash
+```
+
+#### Snap
+
+```hcl
+sudo snap refresh opentofu
+
+```
+
+---
+
+### 🗑 Uninstall OpenTofu
+#### Debian / Ubuntu
+
+```hcl
 sudo apt remove -y opentofu
+
 ```
+#### RHEL-based
 
-### RHEL-based
-
-Bash
-```bash
+```hcl
 sudo dnf remove -y opentofu
+
 ```
+
+#### Snap
+
+```hcl
+sudo snap remove opentofu
+
+```
+
 ---
-## Common Installation Issues
-### ❌ Command not found
 
-Bash
-```bash
-tofu: command not found
-```
+### ⚠️ Common Issues & Troubleshooting
 
-✔ Ensure /usr/bin is in your PATH
-✔ Re-login or restart shell
+
+❌ tofu: command not found
+
+✔ Restart the terminal
+
+✔ Ensure /usr/bin or /snap/bin is in PATH
+
+---
+
+### ❌ Permission issues
+
+Avoid running OpenTofu as root unless required.
+
+---
+
+#### 📌 Best Practices
+
+✔ Use package manager (DEB/RPM) for servers
+
+✔ Use Snap for quick testing
+
+✔ Verify version after install
+
+✔ Keep OpenTofu updated
+
+---
+
+## 📚 Official References
+
+https://opentofu.org/docs/intro/install/deb/
+
+https://opentofu.org/docs/intro/install/rpm/
+
+https://opentofu.org/docs/intro/install/snap/
 
 ---
