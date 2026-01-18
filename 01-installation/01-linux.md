@@ -49,10 +49,11 @@ sudo apt install -y ca-certificates curl gnupg lsb-release
 ```hcl
 sudo install -m 0755 -d /etc/apt/keyrings
 
-curl -fsSL https://packages.opentofu.org/opentofu.gpg | \
-sudo gpg --dearmor -o /etc/apt/keyrings/opentofu.gpg
+curl -fsSL https://get.opentofu.org/opentofu.gpg | sudo tee /etc/apt/keyrings/opentofu.gpg >/dev/null
 
-sudo chmod a+r /etc/apt/keyrings/opentofu.gpg
+curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | sudo gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg >/dev/null
+
+sudo chmod a+r /etc/apt/keyrings/opentofu.gpg /etc/apt/keyrings/opentofu-repo.gpg
 ```
 
 ---
@@ -61,8 +62,11 @@ sudo chmod a+r /etc/apt/keyrings/opentofu.gpg
 
 ```hcl
 echo \
-"deb [signed-by=/etc/apt/keyrings/opentofu.gpg] https://packages.opentofu.org/opentofu $(lsb_release -cs) main" | \
-sudo tee /etc/apt/sources.list.d/opentofu.list > /dev/null
+  "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main
+deb-src [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" | \
+  sudo tee /etc/apt/sources.list.d/opentofu.list > /dev/null
+
+sudo chmod a+r /etc/apt/sources.list.d/opentofu.list
 
 ```
 
@@ -72,7 +76,7 @@ sudo tee /etc/apt/sources.list.d/opentofu.list > /dev/null
 
 ```hcl
 sudo apt update
-sudo apt install -y opentofu
+sudo apt install -y tofu
 
 ```
 ---
@@ -97,7 +101,31 @@ sudo dnf install -y dnf-plugins-core
 ### Step 2: Add OpenTofu RPM repository
 
 ```hcl
-sudo dnf config-manager --add-repo https://packages.opentofu.org/opentofu.repo
+sudo cat >/etc/yum.repos.d/opentofu.repo <<EOF
+[opentofu]
+name=opentofu
+baseurl=https://packages.opentofu.org/opentofu/tofu/rpm_any/rpm_any/\$basearch
+repo_gpgcheck=0
+gpgcheck=1
+enabled=1
+gpgkey=https://get.opentofu.org/opentofu.gpg
+       https://packages.opentofu.org/opentofu/tofu/gpgkey
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+
+[opentofu-source]
+name=opentofu-source
+baseurl=https://packages.opentofu.org/opentofu/tofu/rpm_any/rpm_any/SRPMS
+repo_gpgcheck=0
+gpgcheck=1
+enabled=1
+gpgkey=https://get.opentofu.org/opentofu.gpg
+       https://packages.opentofu.org/opentofu/tofu/gpgkey
+sslverify=1
+sslcacert=/etc/pki/tls/certs/ca-bundle.crt
+metadata_expire=300
+EOF
 
 ```
 
@@ -110,7 +138,7 @@ sudo dnf install -y opentofu
 
 ---
 
-## 🟡 Method 3: Install OpenTofu Using Snap (Universal)
+## 🟡 Method 3: Install OpenTofu Using Snap (Ubuntu)
 
 #### Snap is useful when:
 
@@ -130,7 +158,6 @@ If not installed:
 
 ```hcl
 sudo apt install snapd     # Debian/Ubuntu
-sudo dnf install snapd     # RHEL-based
 
 ```
 ---
@@ -165,7 +192,7 @@ OpenTofu v1.x.x
 
 ```hcl
 sudo apt update
-sudo apt upgrade opentofu
+sudo apt upgrade tofu
 
 ```
 
@@ -189,7 +216,7 @@ sudo snap refresh opentofu
 #### Debian / Ubuntu
 
 ```hcl
-sudo apt remove -y opentofu
+sudo apt remove -y tofu
 
 ```
 #### RHEL-based
